@@ -898,6 +898,18 @@
         }
       }
     });
+
+    document.querySelectorAll('.category-item').forEach(item => {
+      item.addEventListener('click', function() {
+        // 移除其他项的选中状态
+        document.querySelectorAll('.category-item').forEach(i => {
+          i.classList.remove('selected');
+        });
+        
+        // 添加当前项的选中状态
+        this.classList.add('selected');
+      });
+    });
   </script>
 </body>
 </html>
