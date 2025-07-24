@@ -4,7 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>一言API演示</title>
-  <link rel="shortcut icon" href="./favicon.ico">
+  <link rel="icon" href="./favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="./favicon.ico">
+
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
   <style>
     :root {
@@ -200,11 +202,6 @@
       background-color: white;
     }
     
-    .category-item:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 3px 5px rgba(0,0,0,0.1);
-    }
-    
     .category-item.selected{
       background-color: var(--green-main); /* 悬停时使用主绿色 */
       color: white;
@@ -214,15 +211,22 @@
     }
 
     .category-item:hover{
-      background-color: var(--green-main); /* 选中时使用主蓝色 */
-      color: white;
-      border-color: var(--green-main);
-      box-shadow: 0 4px 10px rgba(66, 165, 245, 0.3);
+        transform: translateY(-2px);
     }
 
-    .category-item:hover i, 
     .category-item.selected i {
       color: white;
+    }
+
+    /* 桌面设备 (1024px及以上) */
+    @media (min-width: 1024px) {
+        .category-item:hover{
+          transform: translateY(-2px);
+          background-color: var(--green-main); /* 选中时使用主蓝色 */
+          color: white;
+          border-color: var(--green-main);
+          box-shadow: 0 4px 10px rgba(66, 165, 245, 0.3);
+        }
     }
 
     .range-control {
@@ -899,17 +903,6 @@
       }
     });
 
-    document.querySelectorAll('.category-item').forEach(item => {
-      item.addEventListener('click', function() {
-        // 移除其他项的选中状态
-        document.querySelectorAll('.category-item').forEach(i => {
-          i.classList.remove('selected');
-        });
-        
-        // 添加当前项的选中状态
-        this.classList.add('selected');
-      });
-    });
   </script>
 </body>
 </html>
