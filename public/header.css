@@ -1,0 +1,82 @@
+/* 更优雅的浮动动画（幅度调小） */
+header {
+  animation: float-header 10s cubic-bezier(0.4, 0.1, 0.2, 1) infinite;
+  transform-origin: center;
+}
+
+/*h1 {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 15px;
+  border-radius: 20px;
+  background: linear-gradient(45deg, rgba(52, 152, 219, 0.1), rgba(155, 89, 182, 0.1));
+  backdrop-filter: blur(5px);
+  animation: float-title 6s ease-in-out infinite, 
+             subtle-glow 5s ease-in-out infinite;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+*/
+/*.fa-quote-left {
+  font-size: 1.8rem;
+  color: #ffdd40;
+  filter: drop-shadow(0 0 3px rgba(255, 221, 64, 0.5));
+  animation: subtle-spin 12s ease-in-out infinite, 
+             subtle-pulse 4s ease-in-out infinite;
+}*/
+/*
+.subtitle {
+  margin-top: 20px;
+  padding: 15px 30px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  backdrop-filter: blur(5px);
+  animation: float-subtitle 12s cubic-bezier(0.4, 0, 0.2, 1) infinite, 
+             subtle-fade 10s ease-in-out infinite;
+}*/
+
+/* 更柔和的动画关键帧 */
+@keyframes float-header {
+  0%, 100% { transform: translateY(0) scale(1); }
+  20% { transform: translateY(-4px) scale(1.005); }
+  40% { transform: translateY(4px) scale(0.995); }
+  60% { transform: translateY(-3px) scale(1.003); }
+  80% { transform: translateY(2px) scale(0.997); }
+}
+
+@keyframes float-title {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-4px) rotate(1deg); }
+  50% { transform: translateY(4px) rotate(-0.8deg); }
+  75% { transform: translateY(-3px) rotate(0.5deg); }
+}
+
+@keyframes float-subtitle {
+  0%, 100% { transform: translateY(0) scale(1); }
+  25% { transform: translateY(-3px) scale(1.02); }
+  50% { transform: translateY(3px) scale(0.98); }
+  75% { transform: translateY(-2px) scale(1.01); }
+}
+
+@keyframes subtle-spin {
+  0%, 100% { transform: rotate(0deg) translateY(0); }
+  20% { transform: rotate(3deg) translateY(-1px); }
+  40% { transform: rotate(-2deg) translateY(1px); }
+  60% { transform: rotate(2deg) translateY(-0.5px); }
+  80% { transform: rotate(-1deg) translateY(0.5px); }
+}
+
+@keyframes subtle-glow {
+  0%, 100% { box-shadow: 0 0 8px rgba(52, 152, 219, 0.3); }
+  50% { box-shadow: 0 0 12px rgba(155, 89, 182, 0.4); }
+}
+
+@keyframes subtle-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes subtle-fade {
+  0%, 100% { opacity: 0.9; }
+  50% { opacity: 1; }
+}
