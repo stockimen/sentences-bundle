@@ -14,6 +14,18 @@ export async function onRequest(context) {
     
     // 加载索引数据
     const index = context.env.INDEX;
+    if (typeof index !== 'object' || 
+        !index.categories || 
+        !index.sentences ||
+        Object.keys(index.sentences).length === 0) {
+      
+      return new Response(JSON.stringify({
+        status: 500,
+        message: "服务器错误: 索引数据无效，请检查INDEX环境变量",
+        data: [],
+        ts: Date.now()
+      }), { status: 500 });
+    }
     
     // 获取所有符合条件的句子ID
     const candidateIds = Object.keys(index.sentences).filter(id => {
