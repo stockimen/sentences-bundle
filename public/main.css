@@ -116,6 +116,7 @@ h1 {
   margin-bottom: 20px;
   line-height: 1.4;
 /*  color: #2c3e50;*/
+  color: var(--primary-color);
 }
 
 .hitokoto-info {
