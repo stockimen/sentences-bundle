@@ -4,15 +4,26 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>一言API演示</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
   <style>
     :root {
       --primary-color: #3498db;
+      /* 蓝色系 */
+      --blue-light: #64b5f6;   /* 浅蓝色 */
+      --blue-main: #42a5f5;    /* 主蓝色 */
+      --blue-dark: #1e88e5;   /* 深蓝色 */
+      /* 绿色系 */
+      --green-light: #81c784;  /* 浅绿色 */
+      --green-main: #66bb6a;  /* 主绿色 */
+      --green-dark: #43a047;  /* 深绿色 */
+
       --secondary-color: #2980b9;
       --background-color: #f8f9fa;
       --text-color: #333;
       --border-color: #ddd;
       --success-color: #2ecc71;
       --error-color: #e74c3c;
+      --warning-color: #f39c12;
     }
     
     * {
@@ -20,7 +31,6 @@
       margin: 0;
       padding: 0;
     }
-    
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       line-height: 1.6;
@@ -30,22 +40,22 @@
       max-width: 1200px;
       margin: 0 auto;
     }
-    
     header {
       text-align: center;
       padding: 20px 0;
       margin-bottom: 30px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+
     }
-    
     h1 {
-      color: var(--primary-color);
       font-size: 2.5rem;
       margin-bottom: 10px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
     
     .subtitle {
-      color: #777;
       font-size: 1.2rem;
+      opacity: 0.9;
     }
     
     .container {
@@ -54,7 +64,7 @@
       gap: 30px;
     }
     
-    @media (max-width: 768px) {
+    @media (max-width: 1000px) {
       .container {
         grid-template-columns: 1fr;
       }
@@ -66,6 +76,11 @@
       box-shadow: 0 5px 15px rgba(0,0,0,0.05);
       padding: 25px;
       margin-bottom: 30px;
+      transition: transform 0.3s ease;
+    }
+    
+    .panel:hover {
+      transform: translateY(-5px);
     }
     
     .panel-title {
@@ -74,19 +89,34 @@
       padding-bottom: 15px;
       border-bottom: 2px solid var(--primary-color);
       color: var(--primary-color);
+      display: flex;
+      align-items: center;
+    }
+    
+    .panel-title i {
+      margin-right: 10px;
+      font-size: 1.2em;
     }
     
     .hitokoto-card {
       text-align: center;
       padding: 40px 20px;
       margin-bottom: 30px;
-      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+      background: white;
       border-radius: 10px;
-      min-height: 200px;
+      min-height: 250px;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      border: 1px solid var(--border-color);
+      transition: all 0.3s ease;
+    }
+    
+    .hitokoto-card:hover {
+      box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+      border-color: var(--primary-color);
     }
     
     .hitokoto-text {
@@ -94,12 +124,14 @@
       font-weight: 500;
       margin-bottom: 20px;
       line-height: 1.4;
+      color: #2c3e50;
     }
     
     .hitokoto-info {
-      color: #777;
+      color: #7f8c8d;
       font-style: italic;
       margin-top: 15px;
+      font-size: 1.1rem;
     }
     
     .hitokoto-meta {
@@ -109,21 +141,44 @@
       margin-top: 15px;
       color: #555;
       font-size: 0.9rem;
+      flex-wrap: wrap;
+    }
+    
+    .hitokoto-meta span {
+      background-color: #f1f2f6;
+      padding: 5px 10px;
+      border-radius: 15px;
+      font-size: 0.85rem;
     }
     
     .controls {
       display: grid;
-      gap: 15px;
+      gap: 10px;
     }
     
     .control-group {
       margin-bottom: 20px;
     }
     
+    .control-group-title {
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+      color: #2c3e50;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+    }
+    
+    .control-group-title i {
+      margin-right: 8px;
+      color: var(--primary-color);
+    }
+    
     .control-label {
       display: block;
       margin-bottom: 8px;
       font-weight: 600;
+      color: #34495e;
     }
     
     .category-list {
@@ -134,69 +189,154 @@
     }
     
     .category-item {
-      padding: 10px;
+      padding: 10px 12px;
       border: 1px solid var(--border-color);
       border-radius: 5px;
       text-align: center;
       cursor: pointer;
       transition: all 0.2s;
+      font-size: 0.9rem;
+      background-color: white;
     }
     
-    .category-item:hover, .category-item.selected {
-      background-color: var(--primary-color);
-      color: white;
-      border-color: var(--primary-color);
+    .category-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 3px 5px rgba(0,0,0,0.1);
     }
+    
+.category-item.selected{
+  background-color: var(--green-main); /* 悬停时使用主绿色 */
+  color: white;
+  border-color: var(--green-main);
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.category-item:hover{
+  background-color: var(--blue-main); /* 选中时使用主蓝色 */
+  color: white;
+  border-color: var(--blue-main);
+  box-shadow: 0 4px 10px rgba(66, 165, 245, 0.3);
+}
+
+
+.category-item:hover i, 
+.category-item.selected i {
+  color: white;
+}
+
+
     
     .range-control {
       display: flex;
       align-items: center;
       gap: 15px;
+      margin-bottom: 10px;
     }
     
     .range-input {
       flex: 1;
+      height: 8px;
+      border-radius: 4px;
+      background: #e0e0e0;
+      outline: none;
+      transition: background 0.3s;
+    }
+    
+    .range-input:hover {
+      background: #d0d0d0;
+    }
+    
+    .range-input::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--primary-color);
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
     
     .button {
-      padding: 12px 25px;
+      padding: 14px 28px;
       background-color: var(--primary-color);
       color: white;
       border: none;
-      border-radius: 5px;
+      border-radius: 8px;
       cursor: pointer;
-      font-size: 1rem;
+      font-size: 1.1rem;
       font-weight: 600;
-      transition: background-color 0.3s;
+      transition: all 0.3s;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 10px;
+      box-shadow: 0 4px 6px rgba(52, 152, 219, 0.3);
     }
     
     .button:hover {
       background-color: var(--secondary-color);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 8px rgba(41, 128, 185, 0.4);
+    }
+    
+    .button:active {
+      transform: translateY(1px);
     }
     
     .button:disabled {
       background-color: #bdc3c7;
       cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
     }
     
     .button-icon {
-      font-size: 1.2rem;
+      font-size: 1.3rem;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-row {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+    
+    .form-col {
+      flex: 1;
+    }
+    
+    select, input[type="text"] {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 1rem;
+      background-color: white;
+      transition: all 0.3s;
+    }
+    
+    select:focus, input[type="text"]:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+      outline: none;
     }
     
     .api-response {
       background-color: #2c3e50;
       color: #ecf0f1;
-      padding: 15px;
-      border-radius: 5px;
-      font-family: monospace;
+      padding: 20px;
+      border-radius: 8px;
+      font-family: 'Fira Code', 'Consolas', monospace;
       white-space: pre-wrap;
-      max-height: 300px;
+      max-height: 400px;
       overflow: auto;
       margin-top: 20px;
+      font-size: 0.9rem;
+      line-height: 1.5;
     }
     
     .loading {
@@ -215,11 +355,13 @@
     
     .url-display {
       background-color: #f1f2f6;
-      padding: 10px 15px;
-      border-radius: 5px;
+      padding: 12px 15px;
+      border-radius: 6px;
       font-family: monospace;
       word-break: break-all;
-      margin-top: 10px;
+      margin-top: 20px;
+      font-size: 0.9rem;
+      border-left: 4px solid var(--primary-color);
     }
     
     .success {
@@ -229,18 +371,95 @@
     .error {
       color: var(--error-color);
     }
+    
+    .warning {
+      color: var(--warning-color);
+    }
+    
+    .info-badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+    
+    .info-badge.info {
+      background-color: rgba(52, 152, 219, 0.1);
+      color: var(--primary-color);
+      border: 1px solid rgba(52, 152, 219, 0.3);
+    }
+    
+    .info-badge.warning {
+      background-color: rgba(243, 156, 18, 0.1);
+      color: var(--warning-color);
+      border: 1px solid rgba(243, 156, 18, 0.3);
+    }
+    
+    .info-text {
+      font-size: 0.85rem;
+      color: #7f8c8d;
+      margin-top: 5px;
+    }
+    
+    .section-divider {
+      height: 1px;
+      background-color: var(--border-color);
+      margin: 25px 0;
+    }
+    
+    .stats-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+    
+    .stat-box {
+      background: white;
+      border-radius: 8px;
+      padding: 15px;
+      text-align: center;
+      box-shadow: 极光v0 3px 6px rgba(0,0,0,0.05);
+      border: 1px solid var(--border-color);
+    }
+    
+    .stat-value {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      margin: 10px 0;
+    }
+    
+    .stat-label {
+      font-size: 0.9rem;
+     极光v color: #7f8c8d;
+    }
+    
+    .highlight {
+      background-color: rgba(52, 152, 219, 0.1);
+      padding: 3px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    .clickable:hover {
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
   <header>
-    <h1>一言API演示</h1>
-    <div class="subtitle">随机获取一句优美的话语</div>
+    <h1><i class="fas fa-quote-left"></i> 一言API演示</h1>
+    <div class="subtitle" id="Random-hitokoto">随机获取一句优美的话语</div>
   </header>
   
   <div class="container">
     <div class="left-column">
       <div class="panel">
-        <h2 class="panel-title">获取一言</h2>
+        <h2 class="panel-title clickable" id="get-random"><i class="fas fa-random"></i> 获取一言</h2>
         
         <div class="hitokoto-card">
           <div class="hitokoto-text" id="hitokoto-text">点击下方按钮获取一言</div>
@@ -249,15 +468,18 @@
         </div>
         
         <div class="controls">
+          <!-- 句子类型选择 -->
           <div class="control-group">
-            <label class="control-label">句子类型：</label>
+            <div class="control-group-title"></极光v i> 句子类型</div>
             <div class="category-list" id="category-list">
               <!-- 分类将通过JS动态生成 -->
             </div>
+            <div class="info-text">提示：可多选分类，不选择则使用所有类型</div>
           </div>
           
+          <!-- 句子长度控制 -->
           <div class="control-group">
-            <label class="control-label">句子长度：</label>
+            <div class="control-group-title"><i class="fas fa-ruler"></i> 句子长度</div>
             <div class="range-control">
               <span id="min-length-display">0</span>
               <input type="range" id="min-length" min="0" max="100" value="0" class="range-input">
@@ -268,47 +490,110 @@
             </div>
           </div>
           
+          <!-- 返回格式控制 -->
+          <div class="form-row">
+            <div class="form-col">
+              <div class="control-group-title"><i class="fas fa-code"></i> 返回格式</div>
+              <select id="encode-type" class="button">
+                <option value="json">JSON</option>
+                <option value="text">纯文本</option>
+                <option value="js">JavaScript</option>
+              </select>
+            </div>
+            
+            <div class="form-col">
+              <div class="control-group-title"><i class="fas fa-font"></i> 字符集</div>
+              <select id="charset" class="button">
+                <option value="utf-8">UTF-8</option>
+                <option value="gbk">GBK</option>
+              </select>
+            </div>
+          </div>
+          
+          <!-- 高级参数 -->
+          <div class="form-row" id="js-params" style="display: none;">
+            <div class="form-col">
+              <div class="control-group-title"><i class="fas fa-signature"></i> 回调函数</div>
+              <input type="text" id="callback" class="button" placeholder="例如：moe">
+            </div>
+            
+            <div class="form-col">
+              <div class="control-group-title"><i class="fas fa-crosshairs"></i> 选择器</div>
+              <input type="text" id="selector" class="button" placeholder="例如：.hitokoto" value=".hitokoto-text">
+            </div>
+          </div>
+          
+          <!-- 排序方式 -->
           <div class="control-group">
-            <label class="control-label">返回格式：</label>
-            <select id="encode-type" class="button">
-              <option value="json">JSON</option>
-              <option value="text">纯文本</option>
+            <div class="control-group-title"><i class="fas fa-sort"></i> 排序方式</div>
+            <select id="sort" class="button">
+              <option value="random">随机排序</option>
+              <option value="length_asc">长度升序</option>
+              <option value="length_desc">长度降序</option>
+              <option value="newest">最新优先</option>
+              <option value="oldest">最旧优先</option>
             </select>
           </div>
           
           <button id="get-hitokoto" class="button">
             <span id="button-text">获取一言</span>
-            <span id="button-icon" class="button-icon">✨</span>
+            <span id="button-icon" class="button-icon"><i class="fas fa-magic"></i></span>
           </button>
           
-          <div class="url-display" id="url-display"></div>
+          <div class="url-display" id="url-display">URL将在此显示...</div>
         </div>
       </div>
     </div>
     
     <div class="right-column">
       <div class="panel">
-        <h2 class="panel-title">API响应</h2>
+        <h2 class="panel-title"><i class="fas fa-code"></i> API响应</h2>
         <pre class="api-response" id="api-response">{
   "status": "等待请求..."
 }</pre>
       </div>
       
       <div class="panel">
-        <h2 class="panel-title">API使用说明</h2>
+        <h2 class="panel-title"><i class="fas fa-book"></i> API使用说明</h2>
         <p>通过以下URL获取随机一言：</p>
         <p><code>GET /api/hitokoto</code></p>
         
+        <div class="section-divider"></div>
+        
+        <div class="stats-container">
+          <div class="stat-box">
+            <div class="stat-label">句子类型</div>
+            <div class="stat-value" id="stat-categories">12</div>
+            <div class="stat-label">种</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">句子总数</div>
+            <div class="stat-value" id="stat-sentences">0</div>
+            <div class="stat-label">条</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">平均长度</div>
+            <div class="stat-value" id="stat-avg-length">0</div>
+            <div class="stat-label">字</div>
+          </div>
+        </div>
+        
         <h3>请求参数：</h3>
         <ul>
-          <li><strong>c</strong> - 句子类型（可选，可多选），如：<code>?c=a&c=b</code></li>
-          <li><strong>encode</strong> - 返回格式（可选），值：<code>json</code> 或 <code>text</code></li>
+          <li><strong>c</strong> - 句子类型（可选，可多选），如：<code>?c=a&amp;c=b</code></li>
+          <li><strong>encode</strong> - 返回格式（可选），值：<code>json</code>、<code>text</code> 或 <code极光v>js</code></li>
+          <li><strong>charset</strong> - 字符集（可选），值：<code>utf-8</code> 或 <code>gbk</code></li>
+          <li><strong>callback</strong> - 回调函数名（可选），当<code>encode=js</code>时使用</li>
+          <li><strong>selector</strong> - 选择器（可选），当<code>encode=js</code>时使用，默认：<code>.hitokoto</code></li>
           <li><strong>min_length</strong> - 最小长度（可选）</li>
           <li><strong>max_length</strong> - 最大长度（可选）</li>
+          <li><strong>sort</strong> - 排序方式（可选），值：<code>random</code>、<code>length_asc</code>、<code>length_desc</code>、<code>newest</code>、<code>oldest</code></li>
         </ul>
         
+        <div class="section-divider"></div>
+        
         <h3>返回格式：</h3>
-        <pre>{
+        <pre class="api-response success">{
   "status": 200,
   "message": "ok.",
   "data": [
@@ -319,8 +604,12 @@
       "from": "出处",
       "from_who": "作者",
       "creator": "提交者",
-      "length": 长度,
-      // 其他字段...
+      "creator_uid": 提交者ID,
+      "reviewer": 审核员ID,
+      "uuid": "唯一标识符",
+      "commit_from": "提交来源",
+      "created_at": "创建时间",
+      "length": 长度
     }
   ],
   "ts": 时间戳
@@ -330,49 +619,90 @@
   </div>
   
   <script>
+    // 修复分类加载问题
     document.addEventListener('DOMContentLoaded', async function() {
+      // 获取所有必要的DOM元素
+      const hitokotoText = document.getElementById('hitokoto-text');
+      const hitokotoInfo = document.getElementById('hitokoto-info');
+      const hitokotoMeta = document.getElementById('hitokoto-meta');
+      const minLengthInput = document.getElementById('min-length');
+      const maxLengthInput = document.getElementById('max-length');
+      const minLengthDisplay = document.getElementById('min-length-display');
+      const maxLengthDisplay = document.getElementById('max-length-display');
+      const encodeTypeSelect = document.getElementById('encode-type');
+      const charsetSelect = document.getElementById('charset');
+      const callbackInput = document.getElementById('callback');
+      const selectorInput = document.getElementById('selector');
+      const sortSelect = document.getElementById('sort');
+      const getHitokotoBtn = document.getElementById('get-hitokoto');
+      const getRandom = document.getElementById('get-random');
+      const apiResponse = document.getElementById('api-response');
+      const urlDisplay = document.getElementById('url-display');
+      const buttonIcon = document.getElementById('button-icon');
+      const buttonText = document.getElementById('button-text');
+      const jsParamsSection = document.getElementById('js-params');
+      
       // 加载分类数据
       let categories = [];
       try {
         const response = await fetch('/categories.json');
         categories = await response.json();
         renderCategories(categories);
+        
+        // 更新统计信息
+        document.getElementById('stat-categories').textContent = categories.length;
       } catch (e) {
         console.error('加载分类失败:', e);
+        // 使用硬编码的分类数据作为备选方案
+        categories = [
+          {id: 1, name: "动画", key: "a", desc: "Anime - 动画"},
+          {id: 2, name: "漫画", key: "b", desc: "Comic - 漫画"},
+          {id: 3, name: "游戏", key: "c", desc: "Game - 游戏"},
+          {id: 4, name: "文学", key: "d", desc: "Literature - 文学"},
+          {id: 5, name: "原创", key: "e", desc: "Original - 原创"},
+          {id: 6, name: "网络", key: "f", desc: "Internet - 来自网络"},
+          {id: 7, name: "其他", key: "g", desc: "Other - 其他"},
+          {id: 8, name: "影视", key: "h", desc: "Video - 影视"},
+          {id: 9, name: "诗词", key: "极光v i", desc: "Poem - 诗词"},
+          {id: 10, name: "网易云", key: "j", desc: "NCM - 网易云"},
+          {id: 11, name: "哲学", key: "k", desc: "Philosophy - 哲学"},
+          {id: 12, name: "抖机灵", key: "l", desc: "Funny - 抖机灵"}
+        ];
+        renderCategories(categories);
+        document.getElementById('stat-categories').textContent = categories.length;
+        
+        const categoryList = document.getElementById('category-list');
+        categoryList.insertAdjacentHTML('afterend', '<div class="warning">网络数据加载失败，使用本地分类数据</div>');
       }
-      
-      // DOM元素
-      const hitokotoText = document.getElementById('hitokoto-text');
-      const hitokotoInfo = document.getElementById('hitokoto-info');
-      const hitokotoMeta = document.getElementById('hitokoto-meta');
-      const categoryList = document.getElementById('category-list');
-      const minLengthInput = document.getElementById('min-length');
-      const maxLengthInput = document.getElementById('max-length');
-      const minLengthDisplay = document.getElementById('min-length-display');
-      const maxLengthDisplay = document.getElementById('max-length-display');
-      const encodeTypeSelect = document.getElementById('encode-type');
-      const getHitokotoBtn = document.getElementById('get-hitokoto');
-      const apiResponse = document.getElementById('api-response');
-      const urlDisplay = document.getElementById('url-display');
-      const buttonIcon = document.getElementById('button-icon');
-      const buttonText = document.getElementById('button-text');
       
       // 事件监听器
       minLengthInput.addEventListener('input', updateLengthDisplay);
       maxLengthInput.addEventListener('input', updateLengthDisplay);
       getHitokotoBtn.addEventListener('click', fetchHitokoto);
+      getRandom.addEventListener('click',fetchHitokoto);
+      encodeTypeSelect.addEventListener('change', toggleJsParams);
       
       // 初始更新长度显示
       updateLengthDisplay();
+      toggleJsParams();
+      fetchRandomHitokoto();
       
       // 渲染分类
       function renderCategories(categories) {
-        categoryList.innerHTML = '';
+        const categoryList = document.getElementById('category-list');
+        categoryList.innerHTML = ''; // 清空容器
+        
         categories.forEach(category => {
           const categoryItem = document.createElement('div');
           categoryItem.className = 'category-item';
           categoryItem.dataset.key = category.key;
-          categoryItem.textContent = category.name;
+          categoryItem.title = category.desc;
+          
+          // 创建带图标的分类项
+          categoryItem.innerHTML = `
+            <i class="fas fa-${getCategoryIcon(category.key)}"></i>
+            ${category.name}
+          `;
           
           categoryItem.addEventListener('click', () => {
             categoryItem.classList.toggle('selected');
@@ -382,17 +712,50 @@
         });
       }
       
+      // 获取分类图标
+      function getCategoryIcon(categoryKey) {
+        const icons = {
+          a: 'film',       // 动画
+          b: 'book',       // 漫画
+          c: 'gamepad',    // 游戏
+          d: 'book-open',  // 文学
+          e: 'star',       // 原创
+          f: 'globe',      // 网络
+          g: 'question',   // 其他
+          h: 'tv',         // 影视
+          i: 'poem',       // 诗词 (使用font-awesome图标)
+          j: 'music',      // 网易云
+          k: 'brain',      // 哲学
+          l: 'laugh'       // 抖机灵
+        };
+        return icons[categoryKey] || 'tag';
+      }
+      
       // 更新长度显示
       function updateLengthDisplay() {
         minLengthDisplay.textContent = minLengthInput.value;
         maxLengthDisplay.textContent = maxLengthInput.value;
       }
       
+      // 切换JS参数显示
+      function toggleJsParams() {
+        if (encodeTypeSelect.value === 'js') {
+          jsParamsSection.style.display = 'flex';
+          // 添加警告信息
+          if (charsetSelect.value === 'gbk') {
+            apiResponse.innerHTML = `<span class="warning">警告：GBK编码不支持异步函数！</span>`;
+          }
+        } else {
+          jsParamsSection.style.display = 'none';
+        }
+      }
+      
       // 获取选中的分类
       function getSelectedCategories() {
+        const categoryList = document.getElementById('category-list');
         const selected = Array.from(categoryList.querySelectorAll('.selected'));
         return selected.map(item => item.dataset.key);
-      }
+      }    
       
       // 获取一言
       async function fetchHitokoto() {
@@ -406,13 +769,22 @@
         const minLength = minLengthInput.value;
         const maxLength = maxLengthInput.value;
         const encodeType = encodeTypeSelect.value;
+        const charset = charsetSelect.value;
+        const callback = callbackInput.value;
+        const selector = selectorInput.value;
+        const sort = sortSelect.value;
         
         // 构建API URL
-        const url = new URL('/api/hitokoto', window.location.origin);
+        const url = new URL('./api/hitokoto', window.location.origin);
         selectedCategories.forEach(c => url.searchParams.append('c', c));
         url.searchParams.set('min_length', minLength);
         url.searchParams.set('max_length', maxLength);
         url.searchParams.set('encode', encodeType);
+        url.searchParams.set('charset', charset);
+        url.searchParams.set('sort', sort);
+        
+        if (callback) url.searchParams.set('callback', callback);
+        if (selector) url.searchParams.set('selector', selector);
         
         // 显示URL
         urlDisplay.textContent = url.toString();
@@ -454,14 +826,18 @@
               // 构建元数据
               const category = categories.find(c => c.key === hitokoto.type) || {};
               hitokotoMeta.innerHTML = `
-                <span>类型: ${category.name || hitokoto.type}</span>
-                <span>ID: ${hitokoto.id}</span>
-                <span>长度: ${hitokoto.length}字</span>
+                <span><i class="fas fa-tag"></i> ${category.name || hitokoto.type}</span>
+                <span><i class="fas fa-hashtag"></i> ${hitokoto.id}</span>
+                <span><i class="fas fa-ruler"></i> ${hitokoto.length}字</span>
+                <span><i class="fas fa-calendar"></i> ${formatDate(hitokoto.created_at)}</span>
               `;
               
               // 显示JSON响应
               apiResponse.textContent = JSON.stringify(data, null, 2);
               apiResponse.classList.add('success');
+              
+              // 更新统计数据
+              updateStatistics(data);
             } else {
               hitokotoText.textContent = '未找到匹配的句子';
               hitokotoInfo.textContent = '请尝试其他筛选条件';
@@ -482,9 +858,45 @@
           apiResponse.classList.add('error');
         } finally {
           // 恢复按钮状态
-          buttonIcon.innerHTML = '✨';
+          buttonIcon.innerHTML = '<i class="fas fa-magic"></i>';
           buttonText.textContent = '获取一言';
           getHitokotoBtn.disabled = false;
+        }
+        window.scrollTo({top: 0, behavior: 'smooth'});
+      }
+
+      // 随机获取一言
+      async function fetchRandomHitokoto() {
+        const randomHitokoto = document.getElementById('Random-hitokoto');
+        const url = "./api/hitokoto?encode=text";
+
+        try {
+          // 发送请求
+          const response = await fetch(url);
+          
+          // 根据返回类型处理响应
+          const text = await response.text();
+          console.log(text);
+          randomHitokoto.textContent = text;  
+        } catch (error) {
+          console.log(`错误: ${error.message}`);
+        } finally {
+        }
+
+      }
+      
+      // 格式化日期
+      function formatDate(timestamp) {
+        if (!timestamp) return '未知';
+        const date = new Date(timestamp * 1000);
+        return date.toLocaleDateString();
+      }
+      
+      // 更新统计数据
+      function updateStatistics(data) {
+        if (data.stats) {
+          document.getElementById('stat-sentences').textContent = data.stats.total || 0;
+          document.getElementById('stat-avg-length').textContent = data.stats.avgLength || 0;
         }
       }
     });
