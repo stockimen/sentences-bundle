@@ -1,0 +1,15 @@
+{
+  "name": "hitokoto-api",
+  "version": "1.0.0",
+  "description": "一言API服务",
+  "main": "build-index.js",
+  "scripts": {
+    "build": "node build-index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^4.1.2"
+  }
+}

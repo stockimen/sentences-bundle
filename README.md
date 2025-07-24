@@ -6,6 +6,10 @@
 
 参考： <https://sentences-bundle.hitokoto.cn>
 
+```
+node build-index.js
+```
+
 ## 使用须知
 
 1. 本库遵循 AGPL 开源授权，您在使用本库时需要遵循 AGPL 授权的相关规定。这通常意味着：您在使用、分发、修改、扩充等涉及本库的操作时您需要开源您的修改作品。
