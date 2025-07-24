@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>一言API演示</title>
+  <link rel="shortcut icon" href="./favicon.ico">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
   <style>
     :root {
@@ -204,29 +205,26 @@
       box-shadow: 0 3px 5px rgba(0,0,0,0.1);
     }
     
-.category-item.selected{
-  background-color: var(--green-main); /* 悬停时使用主绿色 */
-  color: white;
-  border-color: var(--green-main);
-  transform: translateY(-5px);
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
-}
+    .category-item.selected{
+      background-color: var(--green-main); /* 悬停时使用主绿色 */
+      color: white;
+      border-color: var(--green-main);
+      transform: translateY(-5px);
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    }
 
-.category-item:hover{
-  background-color: var(--blue-main); /* 选中时使用主蓝色 */
-  color: white;
-  border-color: var(--blue-main);
-  box-shadow: 0 4px 10px rgba(66, 165, 245, 0.3);
-}
+    .category-item:hover{
+      background-color: var(--blue-main); /* 选中时使用主蓝色 */
+      color: white;
+      border-color: var(--blue-main);
+      box-shadow: 0 4px 10px rgba(66, 165, 245, 0.3);
+    }
 
+    .category-item:hover i, 
+    .category-item.selected i {
+      color: white;
+    }
 
-.category-item:hover i, 
-.category-item.selected i {
-  color: white;
-}
-
-
-    
     .range-control {
       display: flex;
       align-items: center;
